@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>La gestion de version avec GIT</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="reveal.js/css/reveal.min.css"/>
+    <style type="text/css">code{white-space: pre;}</style>
+    <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+    </style>
+    <link rel="stylesheet" href="reveal.js/css/theme/beige.css"/>
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+      if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'reveal.js/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+      }
+    </script>
+    <!--[if lt IE 9]>
+    <script src="reveal.js/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">La gestion de version avec GIT</h1>
+    <h3 class="date">LTE Consulting</h3>
+</section>
+
+<section id="arnaud-tournier" class="slide level2">
+<h1>Arnaud Tournier</h1>
+<p><strong>ArchiDév</strong> passionné</p>
+<p>Fondateur de <strong>LTE Consulting</strong></p>
+<p>Speaker <strong>Devoxx</strong>, <strong>GWT.create</strong>, <strong>Paris</strong>/<strong>Toulouse JUG</strong>, etc...</p>
+<p><strong>Full stack</strong> !</p>
+</section>
+<section><section id="quest-ce-que-git" class="titleslide slide level1"><h1>Qu'est-ce que git ?</h1></section><section id="git" class="slide level2">
+<h1>Git</h1>
+<ul>
+<li>Logiciel de <strong>gestion de version distribué</strong>.</li>
+<li>Un ensemble de <strong>petits outils</strong> pour manipuler un arbre d'objets.</li>
+<li>Créé par <strong>Linus Torvalds</strong>, pour les besoins du noyau Linux.</li>
+<li>Le développement commence en <strong>2005</strong>.</li>
+<li>Développement repris maintenant par <strong>Scott Chacon</strong>.</li>
+<li>Extrêment <strong>rapide</strong>, peut gérer de gros projets</li>
+<li>Tracke des <strong>snapshots</strong> et non des <strong>différences</strong></li>
+<li>Assure la cohérence</li>
+<li><strong>http://git-scm.com</strong></li>
+</ul>
+</section><section id="git-nefface-pas" class="slide level2">
+<h1>Git n'efface pas</h1>
+<p>Les données sont toujours <strong>ajoutées</strong> aux index</p>
+<p>Donc une fois indexées, une modification ne sera <strong>jamais</strong> perdue</p>
+</section><section id="la-concurrence" class="slide level2">
+<h1>La concurrence</h1>
+<p>Les systèmes centralisés : SVN, CVS, Perforce, ...</p>
+<p>Les systèmes décentralisés : Mercurial, BitKeeper, ...</p>
+</section></section>
+<section><section id="introduction-en-pratique" class="titleslide slide level1"><h1>Introduction en pratique</h1></section><section id="configuration" class="slide level2">
+<h1>Configuration</h1>
+<ul>
+<li><p>git config -l</p></li>
+<li>git config --global user.name &quot;Mon nom&quot;</li>
+<li>git config --global user.email &quot;mon.email@mail.un&quot;</li>
+<li>git config --global color.ui true</li>
+<li><p>git config --global core.editor vim</p></li>
+</ul>
+<div class="fragment">
+<p>On peut aussi configurer l'auto-complétion (sous Linux)</p>
+<ul>
+<li>contrib/completion/git-completion.bash à sourcer dans ~/.profile</li>
+</ul>
+</div>
+</section><section id="aide" class="slide level2">
+<h1>Aide ?</h1>
+<ul>
+<li>git help</li>
+<li>git help commande</li>
+</ul>
+</section><section id="créer-un-repository" class="slide level2">
+<h1>Créer un repository</h1>
+<ul>
+<li class="fragment">mkdir projet</li>
+<li class="fragment">cd projet</li>
+<li class="fragment">git init</li>
+</ul>
+</section><section id="les-commandes-de-base" class="slide level2">
+<h1>Les commandes de base</h1>
+<ul>
+<li class="fragment"><em>éditer des fichiers...</em></li>
+<li class="fragment">git add file1 file1 ...</li>
+<li class="fragment">git diff --cached</li>
+<li class="fragment">git status</li>
+<li class="fragment">git commit -m &quot;Premier commit&quot;</li>
+<li class="fragment">git log</li>
+<li class="fragment">git status</li>
+</ul>
+</section><section id="on-efface-tout" class="slide level2">
+<h1>On efface tout !</h1>
+<pre><code>    cd ..
+    rm -Rf projet</code></pre>
+</section></section>
+<section><section id="revenons-à-la-théorie-le-modèle-objet" class="titleslide slide level1"><h1>Revenons à la théorie : le modèle objet</h1></section><section id="sha" class="slide level2">
+<h1>Sha</h1>
+<p>Les SHA sont partour dans git !</p>
+<p>40 caractères représentant la signature d'un contenu</p>
+<pre><code>    6ff87c4664981e4397625791c8ea3bbb5f2279a3</code></pre>
+<p>Il est <strong>impossible</strong> que deux contenus différents aient le même <em>SHA</em></p>
+<p>Ceci apporte certains avantages :</p>
+<ul>
+<li>comparaison d'objets rapide,</li>
+<li>les sha sont identiques sur les repos différents,</li>
+<li>détection des erreurs de cohérence.</li>
+</ul>
+</section><section id="les-objets" class="slide level2">
+<h1>Les objets</h1>
+<p>Un <strong>type</strong>, une <strong>taile</strong> et un <strong>contenu</strong></p>
+<p>Il y a quatre types :</p>
+<ul>
+<li><strong>BLOB</strong> : stockage d'un fichier</li>
+<li><strong>TREE</strong> : référence des sous TREE et des BLOBS</li>
+<li><strong>COMMIT</strong> : pointe vers un TREE et contient des métadonnées (auteur, date, commit(s) parents)</li>
+<li><strong>TAG</strong> : utilisé pour tagger des commits</li>
+</ul>
+</section><section id="les-blobs" class="slide level2">
+<h1>Les blobs</h1>
+<table>
+<tr>
+<td style="vertical-align:top;">
+<img src="blob.png" alt="Un blob" />
+</td>
+<td>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> show 6ff87c4664 <span class="co"># montre le contenu</span>
+<span class="kw">git</span> hash-object -w myfile.txt <span class="co"># crée un blob</span></code></pre>
+<ul>
+<li>Deux contenus identiques partageront le même blob</li>
+<li>Invariant : <code>blob.nom == sha1(blob.contenu)</code></li>
+<li>Indépendant de l'emplacement des données</li>
+</ul>
+</td>
+</tr>
+</table>
+</section><section id="stockage" class="slide level2">
+<h1>Stockage</h1>
+<p>Le stockage des objets peu être <strong>détendu</strong> :</p>
+<ul>
+<li>Format ZIP dans un seul fichier (.git/objects/0a/ef6617772...)</li>
+</ul>
+<p>Ou bien <strong>packagé</strong> :</p>
+<ul>
+<li>Stocke seulement les changements, et un pointeur vers le contenu similaire</li>
+<li>Calculé au moment d'un <code>git gc</code></li>
+<li>Utilisé aussi pour les transfers inter-repo</li>
+</ul>
+</section><section id="lobjet-tree" class="slide level2">
+<h1>L'objet tree</h1>
+<table>
+<tr>
+<td style="vertical-align:top;">
+<img src="tree.png" alt="Un tree" />
+</td>
+<td>
+<ul>
+<li>C'est une liste de pointeurs vers des <strong>blobs</strong> et des <strong>trees</strong></li>
+<li>Utilisé en général pour représenter un répertoire</li>
+<li>Deux trees n'ont le même nom que s'ils ont le même contenu, ceci facilite les recherches</li>
+</ul>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> show <span class="co"># fonctionne mais il y a mieux !</span>
+<span class="kw">git</span> ls-tree fb3a8bdd0ce
+<span class="kw">100644</span> blob 63c918c66...2fdc80926e21c .gitignore
+<span class="kw">040000</span> tree 2fb783e47...6fea6013dc745 Documentation
+<span class="kw">100644</span> blob 6ff87c466...a3bbb5f2279a3 Makefile
+
+<span class="kw">cat</span> /tmp/tree.txt <span class="kw">|</span> <span class="kw">git</span> mk-tree <span class="co"># création</span>
+<span class="kw">5bac6559179...e2d8ae83</span></code></pre>
+</td>
+</tr>
+</table>
+</section><section id="lobjet-commit" class="slide level2">
+<h1>L'objet commit</h1>
+<table>
+<tr>
+<td style="vertical-align:top;">
+<img src="commit.png" alt="Un commit" />
+</td>
+<td>
+<p>Créé avec la commande</p>
+<pre><code>  git commit
+  </code></pre>
+<p>Pour explorer :</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> show HEAD --pretty=raw
+<span class="kw">commit</span> fa7ed8...be930bbc0e
+<span class="kw">tree</span> d0ae01...08b6457
+<span class="kw">parent</span> 3ad3...32ee
+<span class="kw">author</span> Arnaud Tournier...
+<span class="kw">committer</span> Arnaud Tournier...
+<span class="co"># comment...</span></code></pre>
+</td>
+</tr>
+</table>
+</section><section id="exemple-de-contenu" class="slide level2">
+<h1>Exemple de contenu</h1>
+<figure>
+<img src="data-model-3.png" />
+</figure>
+</section><section id="lobjet-tag" class="slide level2">
+<h1>L'objet tag</h1>
+<table>
+<tr>
+<td style="vertical-align:top;">
+<img src="tag.png" alt="Un tag" />
+</td>
+<td>
+<ul>
+<li>Utilisés pour stocker des tags signés</li>
+<li>les tags légers sont stockés dans <code>refs/tags/</code></li>
+</ul>
+<p>Création avec</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> tag</code></pre>
+<p>Pour explorer :</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> cat-file tag v2.1
+<span class="kw">object</span> 8e26b5a...9de7193c2
+<span class="kw">type</span> commit
+<span class="kw">tag</span> v2.1
+<span class="kw">tagger</span> Arnaud Tournier...
+<span class="co"># comment...</span></code></pre>
+</td>
+</tr>
+</table>
+</section><section id="ramasse-miettes" class="slide level2">
+<h1>Ramasse miettes</h1>
+<ul>
+<li>git gc</li>
+</ul>
+<p>Il est bon de le faire de temps en temps, mais attentions à ne pas perdre de &quot;dandling commits&quot; !!!</p>
+</section><section id="le-répertoire-.git" class="slide level2">
+<h1>Le répertoire .git</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">HEAD</td>
+<td style="text-align: left;">pointeur vers votre branche courante</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">config</td>
+<td style="text-align: left;">configuration de vos préférences</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">description</td>
+<td style="text-align: left;">description de votre projet</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">hooks/</td>
+<td style="text-align: left;">pre/post action hooks</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">index</td>
+<td style="text-align: left;">fichier d'index</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">logs/</td>
+<td style="text-align: left;">un historique de votre branche</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">objects/</td>
+<td style="text-align: left;">vos objets (commits, trees, blobs, tags)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">refs/</td>
+<td style="text-align: left;">pointeurs vers vos branches</td>
+</tr>
+</tbody>
+</table>
+</section><section id="le-répertoire-de-travail" class="slide level2">
+<h1>Le répertoire de travail</h1>
+<ul>
+<li>C'est votre espace de travail</li>
+<li>A la racine de votre projet</li>
+<li>Il est souvent modifié !</li>
+</ul>
+</section><section id="cycle-de-vie" class="slide level2">
+<h1>Cycle de vie</h1>
+<figure>
+<img src="reset-workflow.png" alt="Les transitions entre états" /><figcaption>Les transitions entre états</figcaption>
+</figure>
+</section><section id="cycle-de-vie-en-détail" class="slide level2">
+<h1>Cycle de vie en détail</h1>
+<figure>
+<img src="lifecycle.png" alt="Les transitions entre états en détail" /><figcaption>Les transitions entre états en détail</figcaption>
+</figure>
+</section><section id="lindex" class="slide level2">
+<h1>L'index</h1>
+<ul>
+<li>Fichier <code>.git/index</code></li>
+<li>Zone d'assemblage pour construire un commit</li>
+<li>A la création d'un commit, ce n'est pas le répertoire de travail qui est pris en compte, mais cette zone dite de <strong>staging</strong></li>
+</ul>
+<p>Voici quelques commandes associées :</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> add file
+<span class="kw">git</span> rm file
+<span class="kw">git</span> status
+<span class="kw">git</span> commit
+<span class="kw">...</span></code></pre>
+</section><section id="les-branches" class="slide level2">
+<h1>Les branches</h1>
+<ul>
+<li>Ce sont des pointeurs nommés sur des commits</li>
+<li>Stockées dans le répertoire <code>.git/refs/</code></li>
+<li>La branche par défaut est <strong>master</strong></li>
+</ul>
+<p>Quelques commandes :</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> branch branch_name
+<span class="kw">git</span> checkout branch_name</code></pre>
+</section><section id="illustration" class="slide level2">
+<h1>Illustration</h1>
+<figure>
+<img src="interesting-rebase-1.png" alt="Les commits et branches d&#39;un repo" /><figcaption>Les commits et branches d'un repo</figcaption>
+</figure>
+</section><section id="le-pointeur-head" class="slide level2">
+<h1>Le pointeur HEAD</h1>
+<p>C'est un pointeur symbolique qui indique le <strong>commit courant</strong>.</p>
+<p>Il est en général <strong>égal à la branche courante</strong>.</p>
+<p>Mais pas forcément, c'est le mode <strong>detached</strong>.</p>
+</section></section>
+<section><section id="utilisation-locale" class="titleslide slide level1"><h1>Utilisation locale</h1></section><section id="cloner-un-repo" class="slide level2">
+<h1>Cloner un repo</h1>
+<p>Fonctionne avec les protocoles : fichiers, http, git, ssh, ...</p>
+<pre><code>    git clone git://server/path/projet.git</code></pre>
+<p>Vous êtes maintenant &quot;branchés&quot; sur le repository &quot;central&quot;</p>
+</section><section id="ajouter-un-fichier-à-lindex" class="slide level2">
+<h1>Ajouter un fichier à l'index</h1>
+<pre><code>    git add file1 file2 ...
+
+    git diff --cached
+    git status</code></pre>
+</section><section id="etat-du-repository" class="slide level2">
+<h1>Etat du repository</h1>
+<ul>
+<li class="fragment">Répertoire de travail : <code>git status</code>, <code>git diff</code></li>
+<li class="fragment">Index : <code>git diff --cached</code></li>
+<li class="fragment">Les deux : <code>git diff HEAD</code></li>
+<li class="fragment">Seulement les stats : <code>git diff --stat</code></li>
+<li class="fragment">Et ça ? <code>git diff HEAD -- ./lib</code></li>
+</ul>
+</section><section id="effectuer-un-commit" class="slide level2">
+<h1>Effectuer un commit</h1>
+<pre><code>    git commit -m &quot;message&quot;        
+    git commit -a -m &quot;message&quot;</code></pre>
+<p>Modifier le commit précédent :</p>
+<pre><code>    git commit --amend</code></pre>
+</section><section id="conseils-pour-un-commit" class="slide level2">
+<h1>Conseils pour un commit</h1>
+<ul>
+<li>Faire des petits changements</li>
+<li>De nombreuses fois</li>
+<li>Message : une ligne de sujet, une ligne vide et une description</li>
+</ul>
+</section><section id="annuler-une-modification" class="slide level2">
+<h1>Annuler une modification</h1>
+<pre><code>    git checkout -- fichier</code></pre>
+</section><section id="retirer-un-fichier-de-lindex" class="slide level2">
+<h1>Retirer un fichier de l'index</h1>
+<p>De l'index et du répertoire de travail</p>
+<pre><code>    git rm fichier
+    </code></pre>
+<p>De l'index seulement</p>
+<pre><code>    git rm --cached fichier</code></pre>
+</section><section id="gitignore" class="slide level2">
+<h1>.gitignore</h1>
+<p>Par défaut, <em>git</em> surveille tous les fichiers de l'espace de travail.</p>
+<p>Le fichier <strong>.gitignore</strong> permet de spécifier des patterns à ignorer, exemple :</p>
+<pre><code>    .settings/
+    .project
+    *.classpath
+    /doc/[abc]*.txt
+    *.iml
+    gwt-gen/</code></pre>
+</section><section id="git-reset" class="slide level2">
+<h1>Git reset</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">git reset HEAD fichier</td>
+<td style="text-align: left;">retire de l'index, ne touche pas au fichier</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">git reset</td>
+<td style="text-align: left;">détruit la zone de staging (index)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">git reset --hard</td>
+<td style="text-align: left;">idem, mais touche aux fichiers de travail</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">git reset <em>commit</em></td>
+<td style="text-align: left;">repositionne la branche courante sur le commit</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">git reset --soft</td>
+<td style="text-align: left;">ne touche ni à l'index, ni au fichiers de travail</td>
+</tr>
+</tbody>
+</table>
+</section><section id="utilisation-des-branches" class="slide level2">
+<h1>Utilisation des branches</h1>
+<ul>
+<li class="fragment">git branch</li>
+<li class="fragment">git branch experience</li>
+<li class="fragment">git checkout experience</li>
+<li class="fragment">git checkout -b experience</li>
+<li class="fragment">git checkout master &amp;&amp; git merge experience</li>
+<li class="fragment">git branch -d experience</li>
+</ul>
+</section><section id="la-fusion-merge" class="slide level2">
+<h1>La fusion (merge)</h1>
+<p>Après avoir créé et travaillé sur une branche de développement, on souhaite la fusionner dans la branche principale</p>
+</section><section id="merge-en-images" class="slide level2">
+<h1>Merge en images</h1>
+<figure>
+<img src="merge-1.png" alt="Situation initiale" /><figcaption>Situation initiale</figcaption>
+</figure>
+</section><section id="merge-en-images-1" class="slide level2">
+<h1>Merge en images</h1>
+<figure>
+<img src="merge-2.png" alt="Les deux branches divergent" /><figcaption>Les deux branches divergent</figcaption>
+</figure>
+</section><section id="merge-en-images-2" class="slide level2">
+<h1>Merge en images</h1>
+<figure>
+<img src="merge-3.png" alt="Les deux branches fusionnées" /><figcaption>Les deux branches fusionnées</figcaption>
+</figure>
+</section><section id="exemple" class="slide level2">
+<h1>Exemple</h1>
+<blockquote>
+<p>Avoir un repo clean</p>
+</blockquote>
+<ul>
+<li class="fragment">git checkout -b dev</li>
+<li class="fragment">créer un fichier</li>
+<li class="fragment">git commit -a -m &quot;dev 1&quot;</li>
+<li class="fragment">git checkout master</li>
+<li class="fragment">git merge dev</li>
+<li class="fragment">git branch -d dev</li>
+</ul>
+</section><section id="les-cas-de-merge" class="slide level2">
+<h1>Les cas de merge</h1>
+<ul>
+<li class="fragment">Pas de conflit, fast-forward (cas précédent)</li>
+<li class="fragment">Pas de conflit, mais il faut un commit de merge (la plupart des cas)</li>
+<li class="fragment">Conflits !</li>
+</ul>
+</section><section id="détection-des-conflits" class="slide level2">
+<h1>Détection des conflits</h1>
+<p>Si un conflit apparaît, l'opération de merge s'arrête temporairement, et <em>git</em> indique directement dans les fichiers les endroits qui posent problèmes.</p>
+<pre><code>    &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD:file.txt
+    Hello world
+    =======
+    Goodbye
+    &gt;&gt;&gt;&gt;&gt;&gt;&gt; 77976da35a11db4580b80ae27e8d65caf5208086:file.txt</code></pre>
+</section><section id="résolution-des-conflits" class="slide level2">
+<h1>Résolution des conflits</h1>
+<p>A vous alors de résoudre le conflit. Il existe de nombreux outils disponibles...</p>
+<p>Une fois le conflit résolu, faire :</p>
+<pre><code>    git add file.txt
+    git commit</code></pre>
+</section><section id="historique" class="slide level2">
+<h1>Historique</h1>
+<ul>
+<li class="fragment">git log</li>
+<li class="fragment">git log --since=&quot;2 weeks ago&quot;</li>
+<li class="fragment">git log extract.sh</li>
+<li class="fragment">git log commons/</li>
+<li class="fragment">git log -S'foo()'</li>
+<li class="fragment">git log -p # pour voir les patchs</li>
+<li class="fragment">git log --stat</li>
+<li class="fragment">git log --pretty=oneline</li>
+<li class="fragment">git log --pretty=format:'%h was %an, %ar, message: %s'</li>
+<li class="fragment">git log --graph</li>
+</ul>
+</section><section id="ordonnancement-de-lhistorique" class="slide level2">
+<h1>Ordonnancement de l'historique</h1>
+<ul>
+<li><p>git log --pretty=format:'%h : %s' --topo-order --graph</p>
+<pre><code>* 4a904d7 : Merge branch &#39;idx2&#39;
+|\
+| * dfeffce : merged in bryces changes and fixed some testing issues
+| |\
+| | * 23f4ecf : Clarify how to get a full count out of Repo#commits
+| | * 9d6d250 : Appropriate time-zone test fix from halorgium</code></pre></li>
+</ul>
+</section><section id="comparaison-de-commits" class="slide level2">
+<h1>Comparaison de commits</h1>
+<ul>
+<li><p>git diff master..test</p></li>
+<li><p>git diff master...test</p></li>
+</ul>
+</section><section id="les-raccourcis" class="slide level2">
+<h1>Les raccourcis</h1>
+</section><section id="sha-partiel" class="slide level2">
+<h1>Sha partiel</h1>
+<p>Pour référencer un SHA, on utilise :</p>
+<pre><code>    980e3ccdaac54a0d4de358f3fe5d718027d96aae
+    980e3ccdaac54a0d4
+    980e3cc</code></pre>
+</section><section id="pointeurs" class="slide level2">
+<h1>Pointeurs</h1>
+<p>Vous pouvez également utiliser toute branche, tag, etc... :</p>
+<pre><code>    980e3ccdaac54a0d4de358f3fe5d718027d96aae
+    origin/master
+    refs/remotes/origin/master
+    master
+    refs/heads/master
+    v1.0
+    refs/tags/v1.0</code></pre>
+</section><section id="autres" class="slide level2">
+<h1>Autres</h1>
+<pre><code>    master@{1 month ago}
+    master^2 # Deuxième parent
+    master~3 # Troisième ancêtre
+    master^^~ #idem</code></pre>
+</section><section id="pointeur-de-tree" class="slide level2">
+<h1>Pointeur de tree</h1>
+<p>Pour obtenir le SHA du TREE vers lequel un COMMIT pointe, on fait :</p>
+<pre><code>    master^{tree}</code></pre>
+</section><section id="blobs" class="slide level2">
+<h1>Blobs</h1>
+<p>Pour obtenir le SHA d'un blob :</p>
+<pre><code>    master:/chemin/fichier</code></pre>
+</section><section id="rebase" class="slide level2">
+<h1>Rebase</h1>
+<p>Les commits de merge sont puissants mais ils compliquent aussi l'historique.</p>
+<div class="fragment">
+<p>La commande <strong>git rebase</strong> vient à la rescousse ! Elle permet de réécrire l'historique.</p>
+</div>
+</section><section id="rebase-en-image" class="slide level2">
+<h1>Rebase en image</h1>
+<figure>
+<img src="basic-rebase-1.png" alt="Situation initiale" /><figcaption>Situation initiale</figcaption>
+</figure>
+</section><section id="rebase-en-image-1" class="slide level2">
+<h1>Rebase en image</h1>
+<figure>
+<img src="basic-rebase-2.png" alt="Après un merge..." /><figcaption>Après un merge...</figcaption>
+</figure>
+</section><section id="rebase-en-image-2" class="slide level2">
+<h1>Rebase en image</h1>
+<figure>
+<img src="basic-rebase-3.png" alt="Rebase de la branche experiment sur master" /><figcaption>Rebase de la branche experiment sur master</figcaption>
+</figure>
+<p><em>Notez bien que C4' est différent de C4 !</em></p>
+</section><section id="rebase-en-image-3" class="slide level2">
+<h1>Rebase en image</h1>
+<figure>
+<img src="basic-rebase-4.png" alt="Fast-forward de master" /><figcaption>Fast-forward de master</figcaption>
+</figure>
+</section><section id="rebase-local" class="slide level2">
+<h1>Rebase local</h1>
+<pre><code>    git checkout experiment
+    git rebase master
+    </code></pre>
+<p>Rebase la branche <strong>developpement</strong> sur la branche <strong>master</strong>.</p>
+</section><section id="conflits" class="slide level2">
+<h1>Conflits</h1>
+<p>Il peut y avoir des conflits.</p>
+<p>Dans ce cas comme pour un merge, l'utilisateur résout et :</p>
+<pre><code>    git rebase --continue
+    git rebase --abort # pour annuler</code></pre>
+</section><section id="rebase-intéractif" class="slide level2">
+<h1>Rebase intéractif</h1>
+<p>Permet réécrire très facilement vos commits. C'est très pratique et très puissant pour le travail collaboratif.</p>
+<pre><code>    git rebase -i
+    </code></pre>
+<p>Ouvre un éditeur de texte contenant ceci :</p>
+<pre><code>    pick fc62e55 added file_size
+    pick 9824bf4 fixed little thing
+    pick 21d80a5 added number to log
+    </code></pre>
+<p>Les trois commandes disponibles sont : <strong>pick</strong>, <strong>squash</strong>, <strong>edit</strong></p>
+</section><section id="rebase-intéractif---edit" class="slide level2">
+<h1>Rebase intéractif - edit</h1>
+<p>Git vous redonne la main, ce qui permet par exemple de couper un commit en deux.</p>
+<pre><code>    git add fichier1
+    git commit -m &quot;tache A&quot;
+    git add fichier2
+    git commit -m &quot;tache B&quot;
+    git rebase --continue</code></pre>
+</section><section id="les-tags" class="slide level2">
+<h1>Les tags</h1>
+<p>Un label qui pointe sur un commit</p>
+<ul>
+<li>git tag v2.3.4b 1b238ae12</li>
+</ul>
+</section><section id="les-tag-objets" class="slide level2">
+<h1>Les tag objets</h1>
+<ul>
+<li>git tag -a v2.3.4b 1b238ae12</li>
+</ul>
+<p><code>-s</code> pour signer le tag, après avoir configuré la clé utilisateur</p>
+<ul>
+<li>git config --global user.signingkey <code>&lt;gpg-key-id&gt;</code></li>
+</ul>
+</section></section>
+<section><section id="collaboration" class="titleslide slide level1"><h1>Collaboration</h1></section><section id="principe" class="slide level2">
+<h1>Principe</h1>
+<p>Git est <strong>distribué</strong>.</p>
+<p>Il fournit des outils pour <strong>synchroniser</strong> des repositories distants.</p>
+<p>Un repo <em>local</em> n'est pas différent d'un repo <em>distant</em>, il contiennent tous les deux toutes les informations.</p>
+</section><section id="configuration-dun-dépôt-public" class="slide level2">
+<h1>Configuration d'un dépôt public</h1>
+<p>C'est un repository sans zone de travail (<em>bare</em>)</p>
+</section><section id="avec-le-protocole-git" class="slide level2">
+<h1>Avec le protocole <strong>git</strong></h1>
+<p>A partir d'un repo local, avec le protocole <strong>git</strong> :</p>
+<ul>
+<li>git clone <strong>--bare</strong> src_folder dest_folder</li>
+<li>touch dest_folder/.git/git-daemon-export-ok</li>
+</ul>
+<blockquote>
+<p>Ensuite, lancer le démon git</p>
+</blockquote>
+<ul>
+<li>git daemon</li>
+</ul>
+</section><section id="avec-le-protocole-http" class="slide level2">
+<h1>Avec le protocole <strong>http</strong></h1>
+<p>Avec le protocole <strong>http</strong> :</p>
+<ul>
+<li>git clone <strong>--bare</strong> src_folder dest_folder</li>
+<li>git --bare update-server-info</li>
+<li>chmod a+x hooks/post-update</li>
+</ul>
+<blockquote>
+<p>Les autres peuvent cloner comme ceci :</p>
+</blockquote>
+<ul>
+<li>git clone http://adresse/projet.git</li>
+</ul>
+</section><section id="avec-le-protocole-ssh" class="slide level2">
+<h1>Avec le protocole <strong>ssh</strong></h1>
+<ul>
+<li>git clone <strong>--bare</strong> src_folder dest_folder</li>
+</ul>
+<blockquote>
+<p>Les autres peuvent cloner comme ceci :</p>
+</blockquote>
+<ul>
+<li>git clone user@server:chemin/projet.git</li>
+</ul>
+</section><section id="travailler-avec-des-repos-distants" class="slide level2">
+<h1>Travailler avec des repos distants</h1>
+<p>Liste des repos distants :</p>
+<pre><code>    git remote</code></pre>
+<p>Ajouter et retirer :</p>
+<pre><code>    git remote add origin http://...
+    git remote rm origin</code></pre>
+</section><section id="fetch" class="slide level2">
+<h1>Fetch</h1>
+<p>Ramène les commits et les branches distants :</p>
+<pre><code>    git fetch &lt;remote&gt;
+    git fetch &lt;remote&gt; &lt;branch&gt;</code></pre>
+<p>Cette commande n'a aucune incidence sur votre travail <strong>local</strong>. Mais maintenant votre repo est à jour des informations contenues dans le repo distant.</p>
+</section><section id="les-branches-distantes" class="slide level2">
+<h1>Les branches distantes</h1>
+<ul>
+<li>contenues dans <code>refs/remotes/origin/...</code></li>
+<li>faire un <code>checkout</code> sur un branche distante nous place en état <strong>detached</strong>, mais permet la revue avant intégration.</li>
+<li>pour fusionner les changements il suffit de faire un <code>git merge origin/master</code></li>
+</ul>
+</section><section id="pull" class="slide level2">
+<h1>Pull</h1>
+<p>Le deux étapes précédentes sont si courantes qu'il existe une commande intégrée : <strong>git pull</strong>.</p>
+<pre><code>    git pull &lt;remote&gt;
+    
+    git pull --rebase &lt;remote&gt;</code></pre>
+</section><section id="rebase-avec-un-repo-distant" class="slide level2">
+<h1>Rebase avec un repo distant</h1>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> rebase
+<span class="kw">git</span> pull --rebase</code></pre>
+<ul>
+<li><strong>détruit</strong> les commits locaux</li>
+<li><strong>synchronise</strong> les commits de origin</li>
+<li><strong>rejoue</strong> les commits locaux</li>
+</ul>
+</section><section id="push" class="slide level2">
+<h1>Push</h1>
+<p>Envoi du travail local vers un repo distant</p>
+<pre><code>    git push &lt;remote&gt; &lt;branch&gt;</code></pre>
+<p>Git distant refusera si les commits ne sont pas &quot;<em>fast-forward</em>&quot;</p>
+<pre><code>    git push --force # ATTENTION !</code></pre>
+<p>Par défaut les tags ne sont pas transférés :</p>
+<pre><code>    git push --tags</code></pre>
+</section><section id="exemple-1" class="slide level2">
+<h1>Exemple</h1>
+<pre><code>    git checkout master
+    git fetch origin master
+    git rebase -i origin/master
+    # Squash commits, fix up commit messages etc.
+    git push origin master</code></pre>
+</section><section id="branche-de-suivi" class="slide level2">
+<h1>Branche de suivi</h1>
+<p>Une branche peut être configurée pour suivre automatiquement une branche distante lors des <code>git pull</code> et <code>git push</code> :</p>
+<pre><code>    git branch --track exp origin/exp` </code></pre>
+<p>A noter : <code>git clone</code> fait ceci automatiquement sur la branche <code>master</code></p>
+</section></section>
+<section><section id="workflows" class="titleslide slide level1"><h1>Workflows</h1></section><section id="git-sadapte" class="slide level2">
+<h1>Git s'adapte</h1>
+<p>Un des gros avantages de Git est de vous permettre d'adapter son utilisation à <strong>votre</strong> workflow, et pas l'inverse.</p>
+<p>Une foule de <em>workflow</em> différents existent, voici quelques exemples...</p>
+</section><section id="le-partagé" class="slide level2">
+<h1>Le partagé</h1>
+<figure>
+<img src="18333fig0501-tn.png" alt="Workflow partagé" /><figcaption>Workflow partagé</figcaption>
+</figure>
+</section><section id="lintégration" class="slide level2">
+<h1>L'intégration</h1>
+<figure>
+<img src="18333fig0502-tn.png" alt="Workflow intégré" /><figcaption>Workflow intégré</figcaption>
+</figure>
+</section><section id="le-dictateur" class="slide level2">
+<h1>Le dictateur</h1>
+<figure>
+<img src="18333fig0503-tn.png" alt="Workflow du dictateur" /><figcaption>Workflow du dictateur</figcaption>
+</figure>
+</section><section id="git-flow" class="slide level2">
+<h1>Git Flow</h1>
+<p>C'est une façon de fonctionner avec <em>git</em>.</p>
+<p>On utilise 5 sortes de branches</p>
+<ul>
+<li class="fragment">branche de <strong>développement</strong></li>
+<li class="fragment">branches de <strong>features</strong></li>
+<li class="fragment">branches de <strong>release</strong></li>
+<li class="fragment">branche <strong>master</strong></li>
+<li class="fragment">branches de <strong>hotfix</strong></li>
+</ul>
+</section><section id="début-dune-feature" class="slide level2">
+<h1>Début d'une feature</h1>
+<p>Création d'une branche de <strong>feature</strong> basée sur la branche de développement</p>
+<figure>
+<img src="flow-new-feature.png" />
+</figure>
+</section><section id="fin-de-la-feature" class="slide level2">
+<h1>Fin de la feature</h1>
+<p>Fusion de la branche <strong>feature</strong> dans la branche <strong>développement</strong> (<em>--no-ff</em>), effacement de la branche <strong>feature</strong></p>
+<figure>
+<img src="flow-finish-feature.png" />
+</figure>
+</section><section id="commencer-une-release" class="slide level2">
+<h1>Commencer une release</h1>
+<p>Création de la branche de <strong>release</strong> à partir de la branche <strong>développement</strong></p>
+<figure>
+<img src="flow-start-release.png" />
+</figure>
+</section><section id="terminer-une-release" class="slide level2">
+<h1>Terminer une release</h1>
+<p>Merge la branche de <strong>release</strong> dans <strong>developpement</strong> et <strong>master</strong>, Taggue la branche <strong>master</strong> et détruit <strong>release</strong></p>
+<figure>
+<img src="flow-finish-release.png" />
+</figure>
+</section><section id="commencer-un-hotfix" class="slide level2">
+<h1>Commencer un Hotfix</h1>
+<p>Création de la branche de <strong>hotfix</strong> à partir de la branche <strong>master</strong></p>
+<figure>
+<img src="flow-start-hotfix.png" />
+</figure>
+</section><section id="terminer-un-hotfix" class="slide level2">
+<h1>Terminer un hotfix</h1>
+<p>La branche <strong>hotfix</strong> est fusionnée dans <strong>master</strong> et <strong>développement</strong>. La branche master est tagguée avec le numéro de hotfix.</p>
+<figure>
+<img src="flow-finish-hotfix.png" />
+</figure>
+</section></section>
+<section><section id="utilisation-avancée" class="titleslide slide level1"><h1>Utilisation avancée</h1></section><section id="le-stash" class="slide level2">
+<h1>Le Stash</h1>
+<p>Afin de pouvoir rapidement sortir de l'état courant pour aller sur une autre branche, le <strong>stash</strong> sauvegarde le travail en cours</p>
+<pre><code>    git stash save &quot;en cours tache C&quot;</code></pre>
+<p>L'index est maintenant vide, le répertoire de travail est propre. Pour revenir :</p>
+<pre><code>    git stash apply</code></pre>
+</section><section id="la-file-de-stash" class="slide level2">
+<h1>La file de stash</h1>
+<p>Pour montrer la file des stashs :</p>
+<pre><code>    git stash list
+    
+    stash@{0}: WIP on book: 51bea1d... fixed images
+    stash@{1}: WIP on master: 9705ae6... changed the browse code</code></pre>
+<p>Pour appliquer un stash :</p>
+<pre><code>    git stash apply stash@{1}</code></pre>
+<p>Pour vider la liste :</p>
+<pre><code>    git stash clear</code></pre>
+</section><section id="créer-un-commit-dannulation" class="slide level2">
+<h1>Créer un commit d'annulation</h1>
+<p>Git permet de créer un commit mirroir d'un autre commit :</p>
+<pre><code>    git revert SHA</code></pre>
+<p>Bien sûr des conflits peuvent se produire...</p>
+</section><section id="le-cherry-pick" class="slide level2">
+<h1>Le Cherry-Pick</h1>
+<p>Il vous permet de <strong>reproduire un commit</strong> à un autre endroit, en le dupliquant.</p>
+<pre><code>    git cherry-pick SHA</code></pre>
+<p>Pour résoudre les éventuels conflits :</p>
+<pre><code>    git cherry-pick --continue
+    git cherry-pick --abort</code></pre>
+</section><section id="déplacer-un-fichier" class="slide level2">
+<h1>Déplacer un fichier</h1>
+<pre><code>    git mv fichier nouveau_fichier</code></pre>
+<p>est équivalent à</p>
+<pre><code>    mv fichier nouveau_fichier
+    git rm fichier
+    git add nouveau_fichier</code></pre>
+</section><section id="blame" class="slide level2">
+<h1>Blame</h1>
+<p>Permet de voir l'auteur de chaque ligne d'un fichier :</p>
+<pre><code>    git blame index.html --date short
+    ...
+    96776a42 (Gregg 2012-06-29 9) &lt;ul&gt;
+    96776a42 (Gregg 2012-06-29 10) &lt;li&gt;Cats&lt;/li&gt;
+    3ea7f709 (Jane 2012-06-30 11) &lt;li&gt;Octopi&lt;/li&gt;
+    96776a42 (Gregg 2012-06-29 12) &lt;/ul&gt;</code></pre>
+</section><section id="alias" class="slide level2">
+<h1>Alias</h1>
+<p>Permet de rajouter des commandes à git :</p>
+<pre><code>    git config --global alias.mylog \
+        &quot;log --pretty=format:&#39;%h %s [%an]&#39; --graph&quot;
+        </code></pre>
+<p>Donnera :</p>
+<pre><code>    git mylog
+    * 19f735c Merge branch &#39;admin&#39; [Jane]
+    |\
+    | * 7980856 Add user admin [Jane]</code></pre>
+</section><section id="bisect" class="slide level2">
+<h1>Bisect</h1>
+<p>Aide la recherche du commit fautif...</p>
+<pre><code>    git bisect start
+    git bisect good v2.6.18
+    git bisect bad master</code></pre>
+<p>Puis</p>
+<pre><code>    git bisect bad
+      ... ou ...
+    git bisect good
+    
+    git bisect reset</code></pre>
+</section><section id="reflog" class="slide level2">
+<h1>Reflog</h1>
+<p>Git tient un journal de bord de <strong>HEAD</strong>. Il permet par exemple de retrouver des commits non-référencés.</p>
+<pre><code>    git reflog
+    
+    ad8621a HEAD@{0}: reset: moving to HEAD~3
+    298eb9f HEAD@{1}: commit: Some other commit message
+    bbe9012 HEAD@{2}: commit: Continue the feature
+    9cb79fa HEAD@{3}: commit: Start a new feature
+    
+    ... et donc ...
+    
+    git checkout HEAD@{1}</code></pre>
+</section><section id="retrouver-un-commit" class="slide level2">
+<h1>Retrouver un commit</h1>
+<p>Si par mégarde vous perdez un (ou plusieurs) commit, vous pouvez toujours chercher les &quot;dandling&quot; commits avec cette commande :</p>
+<pre><code>    git fsck −−lost-found</code></pre>
+<p>Vous rapatrierez ensuite ceci avec <em>git checkout</em>, <em>git rebase</em>, <em>git cherry-pick</em>, ...</p>
+</section><section id="rechercher-dans-les-commits" class="slide level2">
+<h1>Rechercher dans les commits</h1>
+<pre><code>    git grep chaine
+    
+    -n pour les numéros de ligne</code></pre>
+</section><section id="les-hooks" class="slide level2">
+<h1>Les Hooks</h1>
+<p>Afin de faciliter son intégration avec les usines logicielles, Git propose des <em>hooks</em>.</p>
+<p>Ce sont des scripts exécutés à différents moments du cycle de vie, ils sont stockés dans <code>.git/hooks/</code>.</p>
+<p>Vous pouvez les utiliser pour déclencher des opérations particulières.</p>
+</section><section id="utilité-des-hooks" class="slide level2">
+<h1>Utilité des hooks</h1>
+<p>Typiquement ils peuvent servir :</p>
+<ul>
+<li>à vérifier les messages de commit,</li>
+<li>envoyer des informations à la gestion de projet,</li>
+<li>workflow d'intégration continue (déclenchement de build)...</li>
+</ul>
+</section><section id="les-hooks-client" class="slide level2">
+<h1>Les hooks client</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pre-commit</td>
+<td style="text-align: left;">Vérification avant commit</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">prepare-commit-msg</td>
+<td style="text-align: left;">Préparation du message de commit</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">commit-msg</td>
+<td style="text-align: left;">Traitement du message utilisateur</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">post-commit</td>
+<td style="text-align: left;">Action après commit (email, CI, ...)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">post-checkout</td>
+<td style="text-align: left;">Après checkout</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pre-rebase</td>
+<td style="text-align: left;">Avant un rebase</td>
+</tr>
+</tbody>
+</table>
+<p>En général, si le hook retourne &lt;&gt; 0, l'action est abandonnée</p>
+</section><section id="les-hooks-serveur" class="slide level2">
+<h1>Les hooks serveur</h1>
+<table>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pre-receive</td>
+<td style="text-align: left;">Avant le push</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">update</td>
+<td style="text-align: left;">Idem, mais une fois par ref poussée</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">post-receive</td>
+<td style="text-align: left;">Après un push réussi</td>
+</tr>
+</tbody>
+</table>
+</section><section id="créer-une-branche-vide" class="slide level2">
+<h1>Créer une branche vide</h1>
+<pre><code>    git symbolic-ref HEAD refs/heads/nouvellebranche
+    rm .git/index
+    git clean -fdx
+    &lt;travailler&gt;
+    git add vos fichiers
+    git commit -m &#39;Premier commit&#39;</code></pre>
+</section></section>
+<section><section id="ecosystème" class="titleslide slide level1"><h1>Ecosystème</h1></section><section id="guis" class="slide level2">
+<h1>GUIs</h1>
+<ul>
+<li>gitk (par défaut)</li>
+<li>SourceTree</li>
+<li>TigGit (console)</li>
+<li>SmartGit</li>
+</ul>
+</section><section id="autour-de-git" class="slide level2">
+<h1>Autour de Git</h1>
+<ul>
+<li>gitosis</li>
+<li>gerrit</li>
+<li>gitblit</li>
+<li>git-flow</li>
+<li>...</li>
+</ul>
+</section></section>
+<section><section id="références" class="titleslide slide level1"><h1>Références</h1></section><section id="quelques-sites..." class="slide level2">
+<h1>Quelques sites...</h1>
+<p>https://git-scm.com</p>
+<p>https://www.atlassian.com/git/tutorials/</p>
+<p>http://gitimmersion.com/</p>
+</section></section>
+<section><section id="merci" class="titleslide slide level1"><h1>Merci !!!</h1></section><section id="questions" class="slide level2">
+<h1>Questions ?</h1>
+<p>http://www.lteconsulting.fr</p>
+</section></section>
+    </div>
+  </div>
+
+
+  <script src="reveal.js/lib/js/head.min.js"></script>
+  <script src="reveal.js/js/reveal.min.js"></script>
+
+  <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+//          { src: 'reveal.js/plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; }, }
+//          { src: 'reveal.js/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+]});
+    </script>
+    </body>
+</html>
